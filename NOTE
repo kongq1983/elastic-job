@@ -1,0 +1,5 @@
+
+# 主节点选取
+SetUpFacade.registerStartUpInfo
+
+ElectionListenerManager.LeaderElectionJobListener
