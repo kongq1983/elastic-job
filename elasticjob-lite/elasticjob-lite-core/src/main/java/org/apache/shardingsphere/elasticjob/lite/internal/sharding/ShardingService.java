@@ -43,7 +43,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-/** 作业分片服务
+/** 作业分片服务 重新分配标志:/${JOB_NAME}/leader/sharding/necessary(持久节点)
  * Sharding service.
  */
 @Slf4j
@@ -101,12 +101,12 @@ public final class ShardingService {
      * </p>
      */
     public void shardingIfNecessary() {
-        List<JobInstance> availableJobInstances = instanceService.getAvailableJobInstances();
+        List<JobInstance> availableJobInstances = instanceService.getAvailableJobInstances(); // 获取可用的instances，会先判断server是否是enabled
         if (!isNeedSharding() || availableJobInstances.isEmpty()) { // // 判断是否需要重新分片  或者  没有可分配的实例
             return;
         }
         if (!leaderService.isLeaderUntilBlock()) {
-            blockUntilShardingCompleted();
+            blockUntilShardingCompleted(); // 当前节点不是主节点 并且正在分片中  则等待分片结束
             return;
         }
         waitingOtherShardingItemCompleted(); //有任务在运行  会sleep
@@ -120,7 +120,7 @@ public final class ShardingService {
         log.debug("Job '{}' sharding complete.", jobName);
     }
     
-    private void blockUntilShardingCompleted() {
+    private void blockUntilShardingCompleted() { // 非leader 并且 ${namespace}/jobname/leader/sharding/necessary节点存在 或 ${namespace}/jobname/leader/sharding/processing 节点存在(表示正在执行分片操作)
         while (!leaderService.isLeaderUntilBlock() && (jobNodeStorage.isJobNodeExisted(ShardingNode.NECESSARY) || jobNodeStorage.isJobNodeExisted(ShardingNode.PROCESSING))) {
             log.debug("Job '{}' sleep short time until sharding completed.", jobName);
             BlockUtils.waitingShortTime();

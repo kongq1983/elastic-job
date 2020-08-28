@@ -53,7 +53,7 @@ public final class LeaderService {
         log.debug("Leader election completed.");
     }
     
-    /**
+    /** 当前节点是否主节点
      * Judge current server is leader or not.
      * 
      * <p>
@@ -70,7 +70,7 @@ public final class LeaderService {
                 electLeader();
             }
         }
-        return isLeader();
+        return isLeader(); //到这里 肯定有leader了
     }
     
     /** 当前server是否是leader

@@ -72,7 +72,7 @@ public final class InstanceService {
         List<JobInstance> result = new LinkedList<>();
         for (String each : jobNodeStorage.getJobNodeChildrenKeys(InstanceNode.ROOT)) {  //$jobName/instances
             JobInstance jobInstance = new JobInstance(each);
-            if (serverService.isEnableServer(jobInstance.getIp())) {
+            if (serverService.isEnableServer(jobInstance.getIp())) { // 先判断server的ip是否是enabled
                 result.add(new JobInstance(each));
             }
         }
