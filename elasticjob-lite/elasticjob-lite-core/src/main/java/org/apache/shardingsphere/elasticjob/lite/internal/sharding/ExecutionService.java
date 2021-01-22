@@ -93,7 +93,7 @@ public final class ExecutionService {
         }
     }
     
-    /**
+    /**  ${jobname}/sharding/0/running   ${jobname}/sharding/1/running
      * Judge has running items or not.
      *
      * @param items sharding items need to be judged

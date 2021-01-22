@@ -34,7 +34,7 @@ public final class ElasticJobExecutorService {
     private final ThreadPoolExecutor threadPoolExecutor;
     
     private final BlockingQueue<Runnable> workQueue;
-    
+    /** threadSize= corePoolSize,  maximumPoolSize */
     public ElasticJobExecutorService(final String namingPattern, final int threadSize) {
         workQueue = new LinkedBlockingQueue<>();
         threadPoolExecutor = new ThreadPoolExecutor(

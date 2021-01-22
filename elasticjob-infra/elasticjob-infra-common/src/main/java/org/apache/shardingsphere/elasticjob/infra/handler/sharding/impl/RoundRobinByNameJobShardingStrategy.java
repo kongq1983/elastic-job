@@ -39,13 +39,13 @@ public final class RoundRobinByNameJobShardingStrategy implements JobShardingStr
     private List<JobInstance> rotateServerList(final List<JobInstance> shardingUnits, final String jobName) {
         int shardingUnitsSize = shardingUnits.size();
         int offset = Math.abs(jobName.hashCode()) % shardingUnitsSize;
-        if (0 == offset) {
+        if (0 == offset) { // 剛好是0，則直接返回shardingUnits
             return shardingUnits;
         }
         List<JobInstance> result = new ArrayList<>(shardingUnitsSize);
         for (int i = 0; i < shardingUnitsSize; i++) {
-            int index = (i + offset) % shardingUnitsSize;
-            result.add(shardingUnits.get(index));
+            int index = (i + offset) % shardingUnitsSize; //  假設是offset=2 ,size=6    2、3、4、5、0、1
+            result.add(shardingUnits.get(index));  //(0+2)%6=2     (4+2)%6=0 (5+2)%6=1
         }
         return result;
     }

@@ -24,7 +24,7 @@ public final class SingleThreadJobExecutorServiceHandler extends AbstractJobExec
     
     @Override
     protected int getPoolSize() {
-        return 1;
+        return 1; // threadSize= corePoolSize=1,  maximumPoolSize=1
     }
     
     @Override

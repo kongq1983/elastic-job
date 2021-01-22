@@ -33,7 +33,7 @@ public final class ShardingNode {
     
     private static final String RUNNING_APPENDIX = "running";
     
-    private static final String RUNNING = ROOT + "/%s/" + RUNNING_APPENDIX;
+    private static final String RUNNING = ROOT + "/%s/" + RUNNING_APPENDIX; //   /sharding/0/running  /sharding/1/running
     
     private static final String MISFIRE = ROOT + "/%s/misfire";
     
