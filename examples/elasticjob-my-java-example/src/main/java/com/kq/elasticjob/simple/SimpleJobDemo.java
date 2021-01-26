@@ -32,7 +32,7 @@ public class SimpleJobDemo {
     }
 
     private static JobConfiguration createJobConfiguration() {
-        // 创建作业配置
+        // 创建作业配置 秒，分，时，日，月，周几，年。。。。最后一个可选 每隔5分钟执行一次
         // "0/5 * * * * ?",
         JobConfiguration simpleCoreConfig = JobConfiguration.newBuilder("jobdemo", 3)
                 .shardingItemParameters("0=A,1=B,2=C").cron("* 0/5 * * * ?").failover(true).misfire(true).build();
