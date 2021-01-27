@@ -29,7 +29,7 @@ public final class ShardingNode {
     
     private static final String INSTANCE_APPENDIX = "instance";
     
-    private static final String INSTANCE = ROOT + "/%s/" + INSTANCE_APPENDIX;
+    private static final String INSTANCE = ROOT + "/%s/" + INSTANCE_APPENDIX; // /sharding/0/instance
     
     private static final String RUNNING_APPENDIX = "running";
     
@@ -51,7 +51,7 @@ public final class ShardingNode {
         jobNodePath = new JobNodePath(jobName);
     }
 
-    /**
+    /** sharding/${item}/instance
      * Get the path of instance node.
      *
      * @param item sharding item

@@ -45,7 +45,7 @@ public final class ServerNode {
     
     /**
      * Judge is server path or not.
-     *
+     * jobname/servers/${ip}
      * @param path path to be judged
      * @return is server path or not
      */

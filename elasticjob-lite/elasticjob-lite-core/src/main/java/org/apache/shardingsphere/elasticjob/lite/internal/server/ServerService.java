@@ -43,7 +43,7 @@ public final class ServerService {
         serverNode = new ServerNode(jobName);
     }
     
-    /**
+    /** 如果当前jobName已经shutdown了  则 ${jobName}/servers/${ip} 的 值设置ENABLED或DISABLED
      * Persist online status of job server.
      * 
      * @param enabled enable server or not
@@ -54,7 +54,7 @@ public final class ServerService {
         }
     }
     
-    /** 是否有可用的服务器
+    /** 是否有可用的服务器(ENABLED)
      * Judge has available servers or not.
      * 
      * @return has available servers or not

@@ -1,0 +1,2 @@
+
+java -jar elasticjob-my-java-example-3.0.0-beta-SNAPSHOT-jar-with-dependencies.jar com.kq.elasticjob.simple.SimpleJobDemo

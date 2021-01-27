@@ -52,36 +52,36 @@ public final class ShardingListenerManager extends AbstractListenerManager {
     }
     
     @Override
-    public void start() {
+    public void start() { // 监听的是/jobName
         addDataListener(new ShardingTotalCountChangedJobListener());
         addDataListener(new ListenServersChangedJobListener());
     }
-    
+    // /jobname/config配置文件变动 触发
     class ShardingTotalCountChangedJobListener extends AbstractJobListener {
         
         @Override
         protected void dataChanged(final String path, final Type eventType, final String data) {
             if (configNode.isConfigPath(path) && 0 != JobRegistry.getInstance().getCurrentShardingTotalCount(jobName)) {
-                int newShardingTotalCount = YamlEngine.unmarshal(data, JobConfigurationPOJO.class).toJobConfiguration().getShardingTotalCount();
-                if (newShardingTotalCount != JobRegistry.getInstance().getCurrentShardingTotalCount(jobName)) {
-                    shardingService.setReshardingFlag();
-                    JobRegistry.getInstance().setCurrentShardingTotalCount(jobName, newShardingTotalCount);
+                int newShardingTotalCount = YamlEngine.unmarshal(data, JobConfigurationPOJO.class).toJobConfiguration().getShardingTotalCount(); // 新的分片数（配置文件变了）
+                if (newShardingTotalCount != JobRegistry.getInstance().getCurrentShardingTotalCount(jobName)) { // 数量不一致
+                    shardingService.setReshardingFlag(); // 设置需要分片标志
+                    JobRegistry.getInstance().setCurrentShardingTotalCount(jobName, newShardingTotalCount); // 设置新的分片总数
                 }
             }
         }
     }
-    
+    // 任务服务器数量事件
     class ListenServersChangedJobListener extends AbstractJobListener {
         
-        @Override
+        @Override // jobname/instances下面有新增、删除节点触发 // NODE_CREATED  NODE_DELETED 要么有新的servers节点  或者 是否是服务器路径jobname/servers/${ip}
         protected void dataChanged(final String path, final Type eventType, final String data) {
             if (!JobRegistry.getInstance().isShutdown(jobName) && (isInstanceChange(eventType, path) || isServerChange(path))) {
                 shardingService.setReshardingFlag();
             }
         }
-        
+        // isInstancePath: jobname/instances
         private boolean isInstanceChange(final Type eventType, final String path) {
-            return instanceNode.isInstancePath(path) && Type.NODE_CHANGED != eventType;
+            return instanceNode.isInstancePath(path) && Type.NODE_CHANGED != eventType; // NODE_CREATED  NODE_DELETED
         }
         
         private boolean isServerChange(final String path) {

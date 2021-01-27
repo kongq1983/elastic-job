@@ -69,18 +69,18 @@ public final class ListenerManager {
         regCenterConnectionStateListener = new RegistryCenterConnectionStateListener(regCenter, jobName);
     }
     
-    /**
+    /** 新节点启动的时候
      * Start all listeners.
      */
     public void startAllListeners() {
-        electionListenerManager.start();
-        shardingListenerManager.start();
-        failoverListenerManager.start();
+        electionListenerManager.start(); // //主节点选举
+        shardingListenerManager.start(); //分片
+        failoverListenerManager.start(); //失效转移
         monitorExecutionListenerManager.start();
-        shutdownListenerManager.start();
-        triggerListenerManager.start();
-        rescheduleListenerManager.start();
-        guaranteeListenerManager.start();
-        jobNodeStorage.addConnectionStateListener(regCenterConnectionStateListener);
+        shutdownListenerManager.start(); //关闭
+        triggerListenerManager.start(); //触发器
+        rescheduleListenerManager.start(); //重新调度
+        guaranteeListenerManager.start(); // //保证分布式任务全部开始和结束状态
+        jobNodeStorage.addConnectionStateListener(regCenterConnectionStateListener); //注册中心与任务节点的连接状态
     }
 }

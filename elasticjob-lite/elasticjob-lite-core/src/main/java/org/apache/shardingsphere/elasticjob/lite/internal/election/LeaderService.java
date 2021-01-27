@@ -104,7 +104,7 @@ public final class LeaderService {
         @Override
         public void execute() {
             if (!hasLeader()) { // 当前无主节点  创建临时节点/${JOB_NAME}/leader/electron/instance 为当前节点 值为${jobInstanceId}
-                jobNodeStorage.fillEphemeralJobNode(LeaderNode.INSTANCE, JobRegistry.getInstance().getJobInstance(jobName).getJobInstanceId());
+                jobNodeStorage.fillEphemeralJobNode(LeaderNode.INSTANCE, JobRegistry.getInstance().getJobInstance(jobName).getJobInstanceId()); // 成为leader
             }
         }
     }

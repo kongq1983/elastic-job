@@ -33,10 +33,10 @@ import java.lang.management.ManagementFactory;
 public final class JobInstance {
     
     private static final String DELIMITER = "@-@";
-    
+    /** 进程id */
     private final String jobInstanceId;
     
-    public JobInstance() {
+    public JobInstance() { // 172.16.5.1@-@2908
         jobInstanceId = IpUtils.getIp() + DELIMITER + ManagementFactory.getRuntimeMXBean().getName().split("@")[0];
     }
     

@@ -105,7 +105,7 @@ public final class ExecutionService {
             return false;
         }
         for (int each : items) {
-            if (jobNodeStorage.isJobNodeExisted(ShardingNode.getRunningNode(each))) {
+            if (jobNodeStorage.isJobNodeExisted(ShardingNode.getRunningNode(each))) { // ${jobname}/sharding/1/running  1:是第几个实例 从0开始
                 return true;
             }
         }

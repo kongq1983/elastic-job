@@ -76,11 +76,11 @@ public final class JobScheduler {
     
     public JobScheduler(final CoordinatorRegistryCenter regCenter, final ElasticJob elasticJob, final JobConfiguration jobConfig, final TracingConfiguration<?> tracingConfig,
                         final ElasticJobListener... elasticJobListeners) {
-        this.regCenter = regCenter;
+        this.regCenter = regCenter; // 注册中心
         this.elasticJob = elasticJob; //自己实现的job
         elasticJobType = null;
         this.elasticJobListeners = Arrays.asList(elasticJobListeners);
-        setUpFacade = new SetUpFacade(regCenter, jobConfig.getJobName(), this.elasticJobListeners);
+        setUpFacade = new SetUpFacade(regCenter, jobConfig.getJobName(), this.elasticJobListeners); // 初始化相关Service  比如LeaderService
         schedulerFacade = new SchedulerFacade(regCenter, jobConfig.getJobName());
         jobFacade = new LiteJobFacade(regCenter, jobConfig.getJobName(), this.elasticJobListeners, tracingConfig);
         jobExecutor = null == elasticJob ? new ElasticJobExecutor(elasticJobType, jobConfig, jobFacade) : new ElasticJobExecutor(elasticJob, jobConfig, jobFacade);
@@ -129,7 +129,7 @@ public final class JobScheduler {
         Scheduler result;
         try {
             StdSchedulerFactory factory = new StdSchedulerFactory();
-            factory.initialize(getQuartzProps());
+            factory.initialize(getQuartzProps()); // 每次新建任务都会创建一个线程，会导致线程数过多
             result = factory.getScheduler();
             result.getListenerManager().addTriggerListener(schedulerFacade.newJobTriggerListener());
         } catch (final SchedulerException ex) {
@@ -141,7 +141,7 @@ public final class JobScheduler {
     private Properties getQuartzProps() {
         Properties result = new Properties();
         result.put("org.quartz.threadPool.class", SimpleThreadPool.class.getName());
-        result.put("org.quartz.threadPool.threadCount", "1");
+        result.put("org.quartz.threadPool.threadCount", "1"); // 这里设置为了1，也就是说每个任务，EJ默认都会创建一个线程来进行调度
         result.put("org.quartz.scheduler.instanceName", getJobConfig().getJobName());
         result.put("org.quartz.jobStore.misfireThreshold", "1");
         result.put("org.quartz.plugin.shutdownhook.class", JobShutdownHookPlugin.class.getName());
@@ -154,7 +154,7 @@ public final class JobScheduler {
         result.getJobDataMap().put(JOB_EXECUTOR_DATA_MAP_KEY, jobExecutor);
         return result;
     }
-    
+    /** 注册一些任务的启动信息 */
     private void registerStartUpInfo() {
         JobRegistry.getInstance().registerRegistryCenter(jobConfig.getJobName(), regCenter);
         JobRegistry.getInstance().addJobInstance(jobConfig.getJobName(), new JobInstance());
